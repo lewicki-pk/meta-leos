@@ -1,0 +1,139 @@
+header:
+  version: 13
+
+machine: imx91-11x11-lpddr4-frdm-imx91s
+distro: fsl-imx-wayland
+target: imx-image-core
+
+repos:
+  poky:
+    path: layers/poky
+    url: https://github.com/yoctoproject/poky
+    commit: "d0b46a6624ec9c61c47270745dd0b2d5abbe6ac1"
+    layers:
+      meta:
+      meta-poky:
+
+  meta-openembedded:
+    path: layers/meta-openembedded
+    url: https://github.com/openembedded/meta-openembedded
+    commit: "07330a98cf93806b7a4e0170a541b94962ff3960"
+    layers:
+      meta-oe:
+      meta-multimedia:
+      meta-python:
+      meta-gnome:
+      meta-networking:
+      meta-filesystems:
+      meta-perl:
+
+  meta-freescale:
+    path: layers/meta-freescale
+    url: https://github.com/Freescale/meta-freescale
+    commit: "3d2781ad200846183ee3f3391f49512d0ef1b529"
+    layers:
+      .:
+
+  meta-freescale-3rdparty:
+    path: layers/meta-freescale-3rdparty
+    url: https://github.com/Freescale/meta-freescale-3rdparty
+    commit: "5ba0c7cfdba9bc7c4495f0cdf1c195f45b7164a6"
+    layers:
+      .:
+
+  meta-freescale-distro:
+    path: layers/meta-freescale-distro
+    url: https://github.com/Freescale/meta-freescale-distro
+    commit: "b9c3536b68271c420fe5de36fc284781ceaa32ab"
+    layers:
+      .:
+
+  meta-imx:
+    path: layers/meta-imx
+    url: https://github.com/nxp-imx/meta-imx
+    commit: "1cfbbb8f9ce1d6071775ea6083b79d98597c8206"
+    layers:
+      meta-imx-bsp:
+      meta-imx-sdk:
+      meta-imx-ml:
+      meta-imx-v2x:
+
+  meta-nxp-demo-experience:
+    path: layers/meta-nxp-demo-experience
+    url: https://github.com/nxp-imx-support/meta-nxp-demo-experience
+    commit: "391062c27dd97d6eb1162997cc91125b2dc5395b"
+    layers:
+      .:
+
+  meta-nxp-connectivity:
+    path: layers/meta-nxp-connectivity
+    url: https://github.com/nxp-imx/meta-nxp-connectivity
+    commit: "14a32aa7467f58257e3bb93a5c0fa443c70ae1ae"
+    layers:
+      meta-nxp-matter-baseline:
+      meta-nxp-openthread:
+
+  meta-arm:
+    path: layers/meta-arm
+    url: https://git.yoctoproject.org/meta-arm
+    commit: "21894cc2ea3197e6bfc1a56d889f757a09dc8b31"
+    layers:
+      meta-arm:
+      meta-arm-toolchain:
+
+  meta-clang:
+    path: layers/meta-clang
+    url: https://github.com/kraj/meta-clang
+    commit: "003cba92e982bdd565a6889f28799f8bba14957e"
+    layers:
+      .:
+
+  meta-qt6:
+    path: layers/meta-qt6
+    url: git://code.qt.io/yocto/meta-qt6.git
+    commit: "00c3bd954341a2a755fdee6b978af952f51793e7"
+    layers:
+      .:
+
+  meta-security:
+    path: layers/meta-security
+    url: https://git.yoctoproject.org/meta-security
+    commit: "1f7eeb8e84811fa79b98f236ade42dc52d44cfc6"
+    layers:
+      meta-parsec:
+      meta-tpm:
+
+  meta-virtualization:
+    path: layers/meta-virtualization
+    url: https://git.yoctoproject.org/meta-virtualization
+    commit: "38008d99d5bedc7d9769b9e95e3d6019a2df1698"
+    layers:
+      .:
+
+  meta-freescale-ml:
+    path: layers/meta-freescale-ml
+    url: https://github.com/Freescale/meta-freescale-ml
+    commit: "e55df3c0f515ba62fcc2cc4c8ddee80b99706a40"
+    layers:
+      .:
+
+local_conf_header:
+  consolidated: |
+    CONF_VERSION = "2"
+    EXTRA_IMAGE_FEATURES ?= "allow-empty-password empty-root-password allow-root-login"
+    USER_CLASSES ?= "buildstats"
+    PATCHRESOLVE = "noop"
+    BB_DISKMON_DIRS ??= "\
+        STOPTASKS,${TMPDIR},1G,100K \
+        STOPTASKS,${DL_DIR},1G,100K \
+        STOPTASKS,${SSTATE_DIR},1G,100K \
+        STOPTASKS,/tmp,100M,100K \
+        HALT,${TMPDIR},100M,1K \
+        HALT,${DL_DIR},100M,1K \
+        HALT,${SSTATE_DIR},100M,1K \
+        HALT,/tmp,10M,1K"
+    PACKAGECONFIG:append:pn-qemu-system-native = " sdl"
+    DL_DIR ?= "${TOPDIR}/../downloads/"
+    ACCEPT_FSL_EULA = "1"
+    PACKAGE_CLASSES = "package_deb"
+    EXTRA_IMAGE_FEATURES += "package-management"
